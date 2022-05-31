@@ -41,12 +41,12 @@ func (s Role) DeleteOne(ctx context.Context, roleID primitive.ObjectID) (result 
 		d = dao.Role{}
 	)
 
-	result, err = d.DeleteOne(ctx, roleID)
-	if err != nil {
+	results, errs := d.DeleteOne(ctx, roleID)
+	if errs != nil {
 		return
 	}
-	return result, nil
 
+	return results, nil
 }
 
 //Update..

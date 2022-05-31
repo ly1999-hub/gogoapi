@@ -13,12 +13,10 @@ func DeleteOne(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (
 			ctx = echoutil.GetRequestContext(c)
-			id  = c.Param("ids")
+			id  = c.Param("id")
 
 			d = dao.Role{}
 		)
-		fmt.Println("id")
-		fmt.Println(id)
 		dbID, valid := mongodb.NewIDFromString(id)
 		if !valid {
 			return response.R404(c, nil, response.CommonNotFound)
@@ -27,9 +25,11 @@ func DeleteOne(next echo.HandlerFunc) echo.HandlerFunc {
 		//find staff by OBJ_ID dbID
 		doc := d.FindByID(ctx, dbID)
 		if doc.ID.IsZero() {
+			fmt.Println("hello1")
 			return response.R404(c, nil, response.CommonNotFound)
 		}
-		c.Set("idDelete", dbID)
+		fmt.Println("hello2")
+		c.Set("roleDelete", doc)
 
 		return next(c)
 	}

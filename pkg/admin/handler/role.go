@@ -3,7 +3,6 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"myapp/internal/constant"
 	"myapp/internal/model"
 	"myapp/internal/response"
@@ -116,12 +115,12 @@ func (h Role) Detail(c echo.Context) error {
 
 func (h Role) DeleteOne(c echo.Context) error {
 	var (
-		ctx = echoutil.GetRequestContext(c)
-		s   = service.Role{}
-		ID  = c.Get("idDelete").(primitive.ObjectID)
+		ctx  = echoutil.GetRequestContext(c)
+		s    = service.Role{}
+		role = c.Get("roleDelete").(model.Role)
 	)
 
-	result, err := s.DeleteOne(ctx, ID)
+	result, err := s.DeleteOne(ctx, role.ID)
 	if err != nil {
 		return err
 	}
