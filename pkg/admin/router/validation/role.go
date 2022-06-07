@@ -7,10 +7,10 @@ import (
 	apimodel "myapp/pkg/admin/model/api"
 )
 
-//Role...
+// Role ...
 type Role struct{}
 
-//All...
+// All ...
 func (Role) All(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.RoleAll
@@ -23,7 +23,7 @@ func (Role) All(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//Create...
+// Create ...
 func (Role) Create(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.RoleCreate
@@ -36,7 +36,7 @@ func (Role) Create(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//GetPermission...
+// GetPermission ...
 func (Role) GetPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.PermissionAll

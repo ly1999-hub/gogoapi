@@ -15,7 +15,17 @@ import (
 
 type Staff struct{}
 
-func (h Staff) Login(c echo.Context) error {
+// LoginWithEmail godoc
+// @tags Staff
+// @summary LoginWithEmail
+// @id login-with-email
+// @security ApiKeyAuth
+// @accept json
+// @produce json
+// @param payload body apimodel.StaffLoginWithEmail true "Payload"
+// @success 200 {object} responsemodel.StaffLogin
+// @router /staffs/login-with-email [post]
+func (h Staff) LoginWithEmail(c echo.Context) error {
 	var (
 		s       = service.Staff{}
 		ctx     = echoutil.GetRequestContext(c)
@@ -29,6 +39,16 @@ func (h Staff) Login(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
+// All godoc
+// @tags Staff
+// @summary All
+// @id staff-all
+// @security ApiKeyAuth
+// @accept json
+// @produce json
+// @param payload query apimodel.StaffAll false "Query"
+// @success 200 {object} responsemodel.ResponseList
+// @router /staff [get]
 func (h Staff) All(c echo.Context) error {
 	var (
 		ctx         = echoutil.GetRequestContext(c)
@@ -46,7 +66,17 @@ func (h Staff) All(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
-//Update...
+// Update godoc
+// @tags Staff
+// @summary Update
+// @id update-staff
+// @security ApiKeyAuth
+// @accept json
+// @produce json
+// @param payload body apimodel.StaffUpdate true "Payload"
+// @param id path string true "staff id"
+// @success 200 {object} responsemodel.ResponseUpdate
+// @router /staffs/{id} [put]
 func (h Staff) Update(c echo.Context) error {
 	var (
 		ctx     = echoutil.GetRequestContext(c)
@@ -63,6 +93,16 @@ func (h Staff) Update(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
+// Create godoc
+// @tags Staff
+// @summary All
+// @id staff-all
+// @security ApikeyAuth
+// @accept json
+// @produce json
+// @param payload body apimodel.StaffCreate true "Payload"
+// @success 200 {object} responsemodel.ResponseCreate
+// @router /staffs [post]
 func (h Staff) Create(c echo.Context) error {
 	var (
 		ctx     = echoutil.GetRequestContext(c)
@@ -77,6 +117,16 @@ func (h Staff) Create(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
+// ChangeStatus godoc
+// @tags Staff
+// @summary ChangeStatus
+// @id change-status
+// @security ApiKeyAuth
+// @accept json
+// @produce json
+// @param id path string true "staff id"
+// @success 200 {object} responsemodel.ResponseUpdate
+// @router /staff/{id}/change-status [patch]
 func (h Staff) ChangeStatus(c echo.Context) error {
 	var (
 		s     = service.Staff{}

@@ -1,9 +1,17 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"github.com/golang-jwt/jwt"
+	"github.com/logrusorgru/aurora"
+	"github.com/sendgrid/sendgrid-go"
+	htmltemplate "html/template"
+	"log"
+	"myapp/internal/constant"
+	"myapp/internal/logger"
+	"myapp/pkg/admin/config"
 	"sync"
 	"time"
 
@@ -18,6 +26,7 @@ import (
 	apimodel "myapp/pkg/admin/model/api"
 	"myapp/pkg/admin/model/response"
 
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -36,7 +45,7 @@ func (s Staff) Create(ctx context.Context, payload apimodel.StaffCreate) (result
 	if role := roleDAO.FindByID(ctx, roleID); role.ID.IsZero() {
 		return nil, errors.New(response.CommonNotFoundRole)
 	}
-	//check email Ecited or not
+	// check isEmailExited or not
 	if s.isEmailExisted(ctx, payload.Email) {
 		return nil, errors.New(response.CommonExistedEmail)
 	}
@@ -51,24 +60,60 @@ func (s Staff) Create(ctx context.Context, payload apimodel.StaffCreate) (result
 		return nil, errors.New(response.CommonErrorWhenHandler)
 	}
 	//go s.sendPasswordToEmail(payload.Name,payload.Email,password)
+
+	// sendPasswordToEmail
+	go s.sendPasswordToEmail(payload.Name, payload.Email, password)
+
 	return &responsemodel.ResponseCreate{ID: staff.ID.Hex()}, nil
 }
 
-/*
-func (s Staff)sendPasswordToEmail(toName, toAddress, password string)error{
-	var (envVars =config.GetENV()
+func (s Staff) sendPasswordToEmail(toName, toAddress, password string) error {
+	var (
+		envVars     = config.GetENV()
 		contentHTML bytes.Buffer
 	)
-	html,err :=htmltemplate.New("createStaff.html").Parse(constant.TemplateHTMLNewUser)
-	if err!=nil{
-		logger.Error("New template CreateStaff html Fail !",logger.LogData{
-			"err":err.Error(),
+
+	html, err := htmltemplate.New("createStaff.html").Parse(constant.TemplateHTMLNewUser)
+	if err != nil {
+		logger.Error("New template CreateStaff html Fail !", logger.LogData{
+			"err": err.Error(),
 		})
 		return errors.New(response.CommonErrorWhenHandler)
 	}
-}
-*/
+	err = html.Execute(&contentHTML, struct {
+		Account  string
+		Password string
+	}{Account: toAddress, Password: password})
+	if err != nil {
+		logger.Error("CreateStaff html execute error", logger.LogData{
+			"error": err.Error(),
+		})
+		return errors.New(response.CommonErrorWhenHandler)
+	}
 
+	// Setup mail
+	from := mail.NewEmail(envVars.Email.FromName, envVars.Email.FromAddress)
+	to := mail.NewEmail(toName, toAddress)
+	subject := "Tài khoản  Admin của bạn đã được tạo thành công"
+	content := mail.NewContent("text/html", contentHTML.String())
+	message := mail.NewV3MailInit(from, subject, to, content)
+
+	// send mail
+	client := sendgrid.NewSendClient(envVars.Email.SendGridApiKey)
+	_, err = client.Send(message)
+	if err != nil {
+		logger.Error("Send email failed!", logger.LogData{
+			"error": err.Error(),
+			"email": toAddress,
+		})
+		return err
+	}
+
+	log.Println(aurora.Green("CreateStaff - Successfully sent an email to" + toAddress))
+	return nil
+}
+
+// ChangeStatus ...
 func (s Staff) ChangeStatus(ctx context.Context, staff model.Staff) (*responsemodel.ResponseUpdate, error) {
 	var (
 		d = dao.Staff{}
@@ -84,7 +129,7 @@ func (s Staff) ChangeStatus(ctx context.Context, staff model.Staff) (*responsemo
 	return &responsemodel.ResponseUpdate{ID: staff.ID.Hex()}, nil
 }
 
-//ALL..
+// All ...
 func (s Staff) All(ctx context.Context, q query.Query) (r responsemodel.ResponseList) {
 	var (
 		wg sync.WaitGroup
@@ -133,6 +178,7 @@ func (s Staff) getListResponse(ctx context.Context, staffs []model.Staff) []resp
 
 	return result
 }
+
 func (s Staff) getResponse(ctx context.Context, staff model.Staff) responsemodel.Staff {
 	res := responsemodel.Staff{
 		ID:        staff.ID.Hex(),
@@ -155,7 +201,7 @@ func (s Staff) getResponse(ctx context.Context, staff model.Staff) responsemodel
 	return res
 }
 
-//Update...
+// Update ...
 func (s Staff) Update(ctx context.Context, staff model.Staff, body apimodel.StaffUpdate) (result *responsemodel.ResponseUpdate, err error) {
 	var (
 		d       = dao.Staff{}
@@ -196,7 +242,7 @@ func (s Staff) Update(ctx context.Context, staff model.Staff, body apimodel.Staf
 	return &responsemodel.ResponseUpdate{ID: staff.ID.Hex()}, nil
 }
 
-//GetMe...
+// GetMe ...
 func (s Staff) GetMe(ctx context.Context, staff model.Staff) (result responsemodel.Staff, err error) {
 	return s.getResponse(ctx, staff), nil
 }
@@ -226,7 +272,7 @@ func (s Staff) isEmailExisted(ctx context.Context, email string) bool {
 	return total != 0
 }
 
-//InitRootStaff...
+// InitRootStaff ...
 func (s Staff) InitRootStaff() {
 	var (
 		ctx = context.Background()
@@ -253,6 +299,7 @@ func (s Staff) InitRootStaff() {
 	})
 }
 
+// LoginWithEmail ...
 func (s Staff) LoginWithEmail(ctx context.Context, payload apimodel.StaffLoginWithEmail) (result *responsemodel.StaffLogin, err error) {
 	var (
 		d = dao.Staff{}

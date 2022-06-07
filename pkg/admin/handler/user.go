@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"go.mongodb.org/mongo-driver/bson"
 	"myapp/internal/constant"
 	"myapp/internal/model"
 	"myapp/internal/response"
@@ -10,7 +11,6 @@ import (
 	"myapp/internal/util/query"
 	apimodel "myapp/pkg/admin/model/api"
 	"myapp/pkg/admin/service"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 // User ...

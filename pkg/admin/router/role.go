@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/labstack/echo/v4"
-	"myapp/internal/middlewares"
 	"myapp/pkg/admin/handler"
 	"myapp/pkg/admin/router/checkexist"
 	"myapp/pkg/admin/router/middleware"
@@ -13,7 +12,6 @@ import (
 
 func Role(e *echo.Echo) {
 	g := e.Group("/roles")
-	e.Use(middlewares.JWT("AUTH_SECRET"))
 	h := handler.Role{}
 	v := validation.Role{}
 

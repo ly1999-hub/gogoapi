@@ -19,7 +19,7 @@ import (
 
 type Role struct{}
 
-//create..
+// Create ...
 func (s Role) Create(ctx context.Context, payload apimodel.RoleCreate) (result string, err error) {
 	var (
 		d = dao.Role{}
@@ -35,7 +35,7 @@ func (s Role) Create(ctx context.Context, payload apimodel.RoleCreate) (result s
 	return
 }
 
-//DeleteOne...
+// DeleteOne ...
 func (s Role) DeleteOne(ctx context.Context, roleID primitive.ObjectID) (result int64, err error) {
 	var (
 		d = dao.Role{}
@@ -49,7 +49,7 @@ func (s Role) DeleteOne(ctx context.Context, roleID primitive.ObjectID) (result 
 	return results, nil
 }
 
-//Update..
+// Update ...
 func (s Role) Update(ctx context.Context, roleID primitive.ObjectID, payload apimodel.RoleUpdate) (result string, err error) {
 	var (
 		d = dao.Role{}
@@ -59,7 +59,7 @@ func (s Role) Update(ctx context.Context, roleID primitive.ObjectID, payload api
 		"$set": bson.M{
 			"name":        payload.Name,
 			"code":        mongodb.NonAccentVietnamese(payload.Name),
-			"premissions": payload.Permission,
+			"permissions": payload.Permission,
 		},
 	}
 
@@ -72,7 +72,7 @@ func (s Role) Update(ctx context.Context, roleID primitive.ObjectID, payload api
 	return
 }
 
-//All..
+// All ..
 func (s Role) All(ctx context.Context, query query.Query) (r responsemodel.ResponseList) {
 	var (
 		wg   sync.WaitGroup
@@ -105,7 +105,7 @@ func (s Role) All(ctx context.Context, query query.Query) (r responsemodel.Respo
 	return r
 }
 
-//getResponse
+// getResponse
 
 func (s Role) getResponse(doc model.Role) responsemodel.Role {
 	//get permission
@@ -127,19 +127,19 @@ func (s Role) getResponse(doc model.Role) responsemodel.Role {
 	}
 }
 
-//Detail...
+// Detail ...
 func (s Role) Detail(ctx context.Context, role model.Role) (result responsemodel.RoleDetail) {
 	result.Role = s.getResponse(role)
 	return
 }
 
-//GetRoleByUser..
+// GetRoleByUser ...
 func (s Role) GetRoleByUser(ctx context.Context, role model.Role) (result responsemodel.RoleDetail) {
 	result.Role = s.getResponse(role)
 	return
 }
 
-//HasPermission...
+// HasPermission ...
 func (s Role) HasPermission(ctx context.Context, roleID primitive.ObjectID, permission string) bool {
 	var d = dao.Role{}
 	role := d.FindByID(ctx, roleID)

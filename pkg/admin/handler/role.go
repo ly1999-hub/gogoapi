@@ -14,16 +14,16 @@ import (
 
 type Role struct{}
 
-//All godoc
-//@tags Role
-//summary ALl
-//id role-all
-//security ApikeyAuth
-//@accept json
-//produce json
-//@param payload query apimodel.RoleAll false "Query"
-//@success 200 {object} responsemodel.ResponseList
-//@router /roles[get]
+// All godoc
+// @tags Role
+// @summary ALl
+// @id role-all
+// @security ApikeyAuth
+// @accept json
+// @produce json
+// @param payload query apimodel.RoleAll false "Query"
+// @success 200 {object} responsemodel.ResponseList
+// @router /roles [get]
 func (h Role) All(c echo.Context) error {
 	var (
 		queryParams = echoutil.GetQuery(c).(apimodel.RoleAll)
@@ -31,7 +31,7 @@ func (h Role) All(c echo.Context) error {
 		ctx         = echoutil.GetRequestContext(c)
 		q           = query.Query{
 			Page:     queryParams.Page,
-			Limit:    queryParams.Litmit,
+			Limit:    queryParams.Limit,
 			Keyword:  queryParams.Keyword,
 			SortBSON: bson.M{"createdAt": -1},
 		}
@@ -41,7 +41,7 @@ func (h Role) All(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
-//Create godoc
+// Create godoc
 // @tags Role
 // @summary Create
 // @id role-create
@@ -51,7 +51,6 @@ func (h Role) All(c echo.Context) error {
 // @param payload body apimodel.RoleCreate true "Payload"
 // @success 200 {object} responsemodel.ResponseCreate
 // @router /roles [post]
-
 func (h Role) Create(c echo.Context) error {
 	var (
 		ctx     = echoutil.GetRequestContext(c)
@@ -113,6 +112,16 @@ func (h Role) Detail(c echo.Context) error {
 
 }
 
+// DeleteOne godoc
+// @tags Role
+// @summary DeleteOne
+// @id role-delete-one
+// @security ApiKeyAuth
+// @accept json
+// @product json
+// @param id path string true "role id"
+// @success 200 {int64}
+// @router /roles/{id} [delete]
 func (h Role) DeleteOne(c echo.Context) error {
 	var (
 		ctx  = echoutil.GetRequestContext(c)

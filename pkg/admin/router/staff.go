@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/labstack/echo/v4"
-	"myapp/internal/middlewares"
 	"myapp/pkg/admin/handler"
 	"myapp/pkg/admin/router/checkexist"
 	"myapp/pkg/admin/router/middleware"
@@ -11,7 +10,6 @@ import (
 
 func Staff(e *echo.Echo) {
 	g := e.Group("/staffs")
-	e.Use(middlewares.JWT("AUTH_SECRET"))
 	h := handler.Staff{}
 	v := validation.Staff{}
 
@@ -21,7 +19,7 @@ func Staff(e *echo.Echo) {
 
 	g.PUT("/:id", h.Update, middleware.RequireLogin, middleware.CheckRootPermission, v.Update, checkexist.Staff)
 
-	g.POST("/login", h.Login, v.LoginWithEmail)
+	g.POST("/login", h.LoginWithEmail, v.LoginWithEmail)
 
 	g.PATCH("/:id/changeStatus", h.ChangeStatus, middleware.RequireLogin, middleware.CheckRootPermission, checkexist.Staff)
 

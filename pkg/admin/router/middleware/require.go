@@ -15,8 +15,6 @@ import (
 func RequireLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		staffID := getStaffIDFromContext(c)
-		fmt.Println("staffID")
-		fmt.Println(staffID)
 		if staffID.IsZero() {
 			return response.R401(c, nil, "")
 		}

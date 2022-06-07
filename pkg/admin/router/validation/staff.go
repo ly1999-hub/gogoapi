@@ -9,7 +9,7 @@ import (
 
 type Staff struct{}
 
-//Create...
+// Create ...
 func (Staff) Create(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.StaffCreate
@@ -25,7 +25,7 @@ func (Staff) Create(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//Update...
+// Update ...
 func (Staff) Update(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.StaffUpdate
@@ -42,7 +42,7 @@ func (Staff) Update(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//All...
+// All ...
 func (Staff) All(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.StaffAll
@@ -52,24 +52,6 @@ func (Staff) All(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		echoutil.SetQuery(c, payload)
-		return next(c)
-	}
-}
-
-//ChangPassword...
-func (Staff) ChangePassword(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		var payload apimodel.StaffChangePassword
-
-		if err := c.Bind(&payload); err != nil {
-			return response.R400(c, nil, "")
-		}
-
-		if err := payload.Validate(); err != nil {
-			return response.RouteValidation(c, err)
-		}
-
-		echoutil.SetPayload(c, payload)
 		return next(c)
 	}
 }

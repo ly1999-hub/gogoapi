@@ -1,35 +1,48 @@
 package mongodb
-import(
+
+import (
 	"context"
-	"time"
+	"fmt"
+	"github.com/logrusorgru/aurora"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
 var (
-	database ="gogo"
-	db *mongo.Database
-	client *mongo.Client
+	database = "gogo"
+	db       *mongo.Database
+	client   *mongo.Client
 )
 
-func Connect(){
-	client,err :=mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-
-	if err != nil{
-		println(err)
+// Connect to mongo server
+func Connect(host, user, password, dbName, mechanism, source string) error {
+	connectOptions := options.ClientOptions{}
+	// Set auth if existed
+	if user != "" && password != "" {
+		connectOptions.Auth = &options.Credential{
+			AuthMechanism: mechanism,
+			AuthSource:    source,
+			Username:      user,
+			Password:      password,
+		}
 	}
-	ctx,cencel := context.WithTimeout(context.Background(),20*time.Second)
-	defer cencel()
 
-	err = client.Connect(ctx)
-
-	if err !=nil{
-		println(err)
-	}else{
-		println("connect ok")
+	// Connect
+	client, err := mongo.Connect(context.Background(), connectOptions.ApplyURI(host))
+	if err != nil {
+		fmt.Println("Error when connect to MongoDB database", host, err)
+		return err
 	}
-	db =client.Database(database)
+
+	fmt.Println(aurora.Green("*** CONNECTED TO MONGODB: " + host + " - DB NAME: " + dbName))
+
+	// Set data
+	db = client.Database(dbName)
+
+	return nil
 }
 
-func GetDB()*mongo.Database{
+// GetDB ...
+func GetDB() *mongo.Database {
 	return db
 }
