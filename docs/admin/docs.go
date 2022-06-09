@@ -895,7 +895,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "GoGo - Admin API",
+	Title:            "Admin API",
 	Description:      "API for admin management.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

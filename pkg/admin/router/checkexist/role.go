@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"myapp/internal/dao"
-	"myapp/internal/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/echoutil"
+	"myapp/module/mongodb"
 )
 
 func DeleteOne(next echo.HandlerFunc) echo.HandlerFunc {

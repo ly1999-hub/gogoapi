@@ -8,7 +8,7 @@ import (
 	"myapp/pkg/admin/router/validation"
 )
 
-func Staff(e *echo.Echo) {
+func staff(e *echo.Echo) {
 	g := e.Group("/staffs")
 	h := handler.Staff{}
 	v := validation.Staff{}

@@ -23,7 +23,7 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	//echo instance
+	// echo instance
 	e := echo.New()
 
 	// Middleware

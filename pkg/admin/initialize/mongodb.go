@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"myapp/internal/mongodb"
+	"myapp/module/mongodb"
 	"myapp/pkg/admin/config"
 )
 

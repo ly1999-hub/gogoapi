@@ -196,7 +196,7 @@ info:
     url: https://selly.vn
   description: API for admin management.
   termsOfService: https://selly.vn
-  title: GoGo - Admin API
+  title: Admin API
   version: "1.0"
 paths:
   /roles:

@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "API for admin management.",
-        "title": "GoGo - Admin API",
+        "title": "Admin API",
         "termsOfService": "https://selly.vn",
         "contact": {
             "name": "Dev team",

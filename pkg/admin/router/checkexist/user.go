@@ -4,9 +4,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"myapp/internal/constant"
 	"myapp/internal/dao"
-	"myapp/internal/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/echoutil"
+	"myapp/module/mongodb"
 )
 
 // User ...

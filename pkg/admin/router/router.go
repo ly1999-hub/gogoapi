@@ -10,7 +10,8 @@ func Init(e *echo.Echo) {
 	e.Use(middlewares.CORSConfig())
 	e.Use(middlewares.JWT(config.GetENV().AuthSecret))
 
-	Role(e)
-	User(e)
-	Staff(e)
+	role(e)
+	user(e)
+	permission(e)
+	staff(e)
 }

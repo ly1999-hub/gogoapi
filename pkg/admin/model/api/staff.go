@@ -1,16 +1,14 @@
 package apimodel
 
-
-
 import (
+	mongodb2 "myapp/module/mongodb"
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"myapp/internal/model"
-	"myapp/internal/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/pstring"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // StaffCreate ...
@@ -37,10 +35,10 @@ func (c StaffCreate) Validate() error {
 func (c StaffCreate) NewStaffRaw(roleID primitive.ObjectID, password string) model.Staff {
 	now := time.Now()
 	return model.Staff{
-		ID:             mongodb.NewObjectID(),
+		ID:             mongodb2.NewObjectID(),
 		Name:           c.Name,
 		Email:          c.Email,
-		SearchString:   mongodb.NonAccentVietnamese(c.Name),
+		SearchString:   mongodb2.NonAccentVietnamese(c.Name),
 		Phone:          c.Phone,
 		Active:         false,
 		Role:           &roleID,
@@ -138,4 +136,3 @@ func (c StaffLoginWithEmail) Validate() error {
 		validation.Field(&c.Password, validation.Required.Error(response.CommonInvalidPassword)),
 	)
 }
-

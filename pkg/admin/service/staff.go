@@ -11,14 +11,14 @@ import (
 	htmltemplate "html/template"
 	"log"
 	"myapp/internal/constant"
-	"myapp/internal/logger"
+	logger2 "myapp/module/logger"
+	mongodb2 "myapp/module/mongodb"
 	"myapp/pkg/admin/config"
 	"sync"
 	"time"
 
 	"myapp/internal/dao"
 	"myapp/internal/model"
-	"myapp/internal/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/helper"
 	"myapp/internal/util/pstring"
@@ -40,7 +40,7 @@ func (s Staff) Create(ctx context.Context, payload apimodel.StaffCreate) (result
 	)
 
 	// Find Role
-	roleID, isValid := mongodb.NewIDFromString(payload.Role)
+	roleID, isValid := mongodb2.NewIDFromString(payload.Role)
 	if !isValid {
 		return nil, errors.New(response.CommonInvalidRole)
 	}
@@ -78,7 +78,7 @@ func (s Staff) sendPasswordToEmail(toName, toAddress, password string) error {
 
 	html, err := htmltemplate.New("createStaff.html").Parse(constant.TemplateHTMLNewUser)
 	if err != nil {
-		logger.Error("New template CreateStaff html Fail !", logger.LogData{
+		logger2.Error("New template CreateStaff html Fail !", logger2.LogData{
 			"err": err.Error(),
 		})
 		return errors.New(response.CommonErrorWhenHandler)
@@ -88,7 +88,7 @@ func (s Staff) sendPasswordToEmail(toName, toAddress, password string) error {
 		Password string
 	}{Account: toAddress, Password: password})
 	if err != nil {
-		logger.Error("CreateStaff html execute error", logger.LogData{
+		logger2.Error("CreateStaff html execute error", logger2.LogData{
 			"error": err.Error(),
 		})
 		return errors.New(response.CommonErrorWhenHandler)
@@ -105,7 +105,7 @@ func (s Staff) sendPasswordToEmail(toName, toAddress, password string) error {
 	client := sendgrid.NewSendClient(envVars.Email.SendGridApiKey)
 	_, err = client.Send(message)
 	if err != nil {
-		logger.Error("Send email failed!", logger.LogData{
+		logger2.Error("Send email failed!", logger2.LogData{
 			"error": err.Error(),
 			"email": toAddress,
 		})
@@ -211,7 +211,7 @@ func (s Staff) Update(ctx context.Context, staff model.Staff, body apimodel.Staf
 	)
 
 	//func Role
-	roleID, isValid := mongodb.NewIDFromString(body.Role)
+	roleID, isValid := mongodb2.NewIDFromString(body.Role)
 	if !isValid {
 		return nil, errors.New(response.CommonInvalidRole)
 	}
@@ -230,7 +230,7 @@ func (s Staff) Update(ctx context.Context, staff model.Staff, body apimodel.Staf
 	payload := bson.M{
 		"$set": bson.M{
 			"name":         body.Name,
-			"searchString": mongodb.NonAccentVietnamese(body.Name),
+			"searchString": mongodb2.NonAccentVietnamese(body.Name),
 			"phone":        body.Name,
 			"email":        body.Email,
 			"role":         roleID,
@@ -288,10 +288,10 @@ func (s Staff) InitRootStaff() {
 	}
 
 	_ = d.InsertOne(ctx, model.Staff{
-		ID:             mongodb.NewObjectID(),
+		ID:             mongodb2.NewObjectID(),
 		Name:           "root",
 		Email:          "nhly123123456789@gmail.com",
-		SearchString:   mongodb.NonAccentVietnamese("Root"),
+		SearchString:   mongodb2.NonAccentVietnamese("Root"),
 		Active:         true,
 		IsRoot:         true,
 		HashedPassword: helper.HashPassword("12345678"),

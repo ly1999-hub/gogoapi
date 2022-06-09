@@ -10,7 +10,7 @@ import (
 	"myapp/pkg/admin/router/validation"
 )
 
-func Role(e *echo.Echo) {
+func role(e *echo.Echo) {
 	g := e.Group("/roles")
 	h := handler.Role{}
 	v := validation.Role{}
