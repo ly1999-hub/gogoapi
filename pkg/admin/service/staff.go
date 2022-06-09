@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/logrusorgru/aurora"
 	"github.com/sendgrid/sendgrid-go"
@@ -37,7 +38,8 @@ func (s Staff) Create(ctx context.Context, payload apimodel.StaffCreate) (result
 		roleDAO  = dao.Role{}
 		staffDAO = dao.Staff{}
 	)
-	//find Role
+
+	// Find Role
 	roleID, isValid := mongodb.NewIDFromString(payload.Role)
 	if !isValid {
 		return nil, errors.New(response.CommonInvalidRole)
@@ -45,7 +47,8 @@ func (s Staff) Create(ctx context.Context, payload apimodel.StaffCreate) (result
 	if role := roleDAO.FindByID(ctx, roleID); role.ID.IsZero() {
 		return nil, errors.New(response.CommonNotFoundRole)
 	}
-	// check isEmailExited or not
+
+	// Check isEmailExited or not
 	if s.isEmailExisted(ctx, payload.Email) {
 		return nil, errors.New(response.CommonExistedEmail)
 	}
@@ -109,7 +112,7 @@ func (s Staff) sendPasswordToEmail(toName, toAddress, password string) error {
 		return err
 	}
 
-	log.Println(aurora.Green("CreateStaff - Successfully sent an email to" + toAddress))
+	log.Println(aurora.Green("CreateStaff - Successfully sent an email to " + toAddress))
 	return nil
 }
 
@@ -142,14 +145,13 @@ func (s Staff) All(ctx context.Context, q query.Query) (r responsemodel.Response
 	q.AssignKeyword(cond)
 	q.AssignActive(cond)
 
-	wg.Add(1)
+	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		docs := d.FindByCondition(ctx, cond, q.GetFindOptionsUsingPage())
 		r.List = s.getListResponse(ctx, docs)
-	}()
-	wg.Add(1)
 
+	}()
 	go func() {
 		defer wg.Done()
 		r.Total = d.CountByCondition(ctx, cond)
@@ -209,7 +211,6 @@ func (s Staff) Update(ctx context.Context, staff model.Staff, body apimodel.Staf
 	)
 
 	//func Role
-
 	roleID, isValid := mongodb.NewIDFromString(body.Role)
 	if !isValid {
 		return nil, errors.New(response.CommonInvalidRole)
@@ -326,6 +327,8 @@ func (s Staff) LoginWithEmail(ctx context.Context, payload apimodel.StaffLoginWi
 
 	// Generate auth token
 	authToken := GenerateAuthToken(staff)
+
+	fmt.Println(authToken)
 
 	return &responsemodel.StaffLogin{ID: staff.ID.Hex(), Token: authToken}, nil
 }

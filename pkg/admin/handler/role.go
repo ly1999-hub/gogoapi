@@ -120,7 +120,7 @@ func (h Role) Detail(c echo.Context) error {
 // @accept json
 // @product json
 // @param id path string true "role id"
-// @success 200 {int64}
+// @success 200
 // @router /roles/{id} [delete]
 func (h Role) DeleteOne(c echo.Context) error {
 	var (

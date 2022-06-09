@@ -9,14 +9,13 @@ import (
 )
 
 var (
-	database = "gogo"
-	db       *mongo.Database
-	client   *mongo.Client
+	db *mongo.Database
 )
 
 // Connect to mongo server
 func Connect(host, user, password, dbName, mechanism, source string) error {
 	connectOptions := options.ClientOptions{}
+
 	// Set auth if existed
 	if user != "" && password != "" {
 		connectOptions.Auth = &options.Credential{

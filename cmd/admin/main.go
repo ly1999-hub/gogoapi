@@ -4,11 +4,13 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+	"myapp/docs/admin"
 	"myapp/pkg/admin/config"
 	"myapp/pkg/admin/server"
+	"os"
 )
 
-// @title GoGo - Admin API
+// @title Admin API
 // @version 1.0
 // @description API for admin management.
 // @termsOfService https://selly.vn
@@ -34,6 +36,7 @@ func main() {
 	server.Init(e)
 
 	// swagger
+	admin.SwaggerInfo.Host = os.Getenv("DOMAIN_ADMIN")
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(config.GetENV().Port))

@@ -15,6 +15,8 @@ func Staff(e *echo.Echo) {
 
 	g.GET("", h.All, middleware.RequireLogin, middleware.CheckRootPermission, v.All)
 
+	g.GET("/me", h.GetMe, middleware.RequireLogin)
+
 	g.POST("", h.Create, middleware.RequireLogin, middleware.CheckRootPermission, v.Create)
 
 	g.PUT("/:id", h.Update, middleware.RequireLogin, middleware.CheckRootPermission, v.Update, checkexist.Staff)

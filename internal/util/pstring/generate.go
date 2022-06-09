@@ -2,10 +2,7 @@ package pstring
 
 import (
 	"math/rand"
-	"strings"
 	"time"
-
-	"myapp/internal/mongodb"
 )
 
 const charsetPassword = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -24,18 +21,4 @@ func stringWithCharset(length int, charset string) string {
 // GenerateDefaultPassword ...
 func GenerateDefaultPassword(length int) string {
 	return stringWithCharset(length, charsetPassword)
-}
-
-// GenerateCode ...
-func GenerateCode(s string) string {
-	var (
-		underscore = "_"
-		emptySpace = " "
-	)
-	return strings.ReplaceAll(mongodb.NonAccentVietnamese(s), emptySpace, underscore)
-}
-
-// GenerateCodeString ...
-func GenerateCodeString(length int) string {
-	return stringWithCharset(length, charsetCode)
 }

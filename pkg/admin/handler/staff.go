@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"myapp/internal/constant"
@@ -66,6 +67,31 @@ func (h Staff) All(c echo.Context) error {
 	return response.R200(c, res, "")
 }
 
+// GetMe godoc
+// @tags Staff
+// @summary GetMe
+// @id get-me
+// @security ApiKeyAuth
+// @accept json
+// @produce json
+// @success 200 {object} responsemodel.Staff
+// @router /staffs/me [get]
+func (h Staff) GetMe(c echo.Context) error {
+	var (
+		ctx   = echoutil.GetRequestContext(c)
+		staff = echoutil.GetCurrentStaff(c)
+		s     = service.Staff{}
+	)
+	token := echoutil.GetAuthToken(c)
+	fmt.Println(token)
+	res, err := s.GetMe(ctx, staff)
+	if err != nil {
+		return response.R400(c, nil, err.Error())
+	}
+
+	return response.R200(c, res, "")
+}
+
 // Update godoc
 // @tags Staff
 // @summary Update
@@ -95,8 +121,8 @@ func (h Staff) Update(c echo.Context) error {
 
 // Create godoc
 // @tags Staff
-// @summary All
-// @id staff-all
+// @summary Create
+// @id staff-create
 // @security ApikeyAuth
 // @accept json
 // @produce json

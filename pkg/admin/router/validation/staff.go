@@ -56,7 +56,7 @@ func (Staff) All(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//LoginWithEmail...
+// LoginWithEmail ...
 func (Staff) LoginWithEmail(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload apimodel.StaffLoginWithEmail

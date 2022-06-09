@@ -33,7 +33,4 @@ func init() {
 	//  1 - 199
 	list = append(list, common...)
 
-	// 200 - 299
-	list = append(list, delivery...)
-
 }

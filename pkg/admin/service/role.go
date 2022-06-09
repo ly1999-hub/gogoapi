@@ -24,9 +24,11 @@ func (s Role) Create(ctx context.Context, payload apimodel.RoleCreate) (result s
 	var (
 		d = dao.Role{}
 	)
-	//new role data from payload
+
+	// New role data from payload
 	doc := payload.ConvertToRaw()
-	//create role
+
+	// Create role
 	if err = d.InsetOne(ctx, doc); err != nil {
 		return
 	}

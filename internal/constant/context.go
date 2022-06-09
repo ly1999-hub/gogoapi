@@ -2,16 +2,12 @@ package constant
 
 // Context key
 const (
-	ContextKeyPayload            = "payload"
-	ContextKeyQuery              = "query"
-	ContextKeyTokenWithoutBearer = "token_without_bearer"
+	ContextKeyPayload = "payload"
+	ContextKeyQuery   = "query"
 
-	ContextKeyOrder     = "order"
-	ContextKeyRole      = "role"
-	ContextKeyInventory = "inventory"
-	ContextKeyStaff     = "staff"
-	ContextKeyUser      = "user"
+	ContextKeyRole  = "role"
+	ContextKeyStaff = "staff"
+	ContextKeyUser  = "user"
 
-	ContextKeyCurrentUser  = "current_user"
 	ContextKeyCurrentStaff = "current_staff"
 )

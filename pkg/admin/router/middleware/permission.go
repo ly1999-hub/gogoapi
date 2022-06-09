@@ -21,8 +21,7 @@ func CheckPermission(permission string) echo.MiddlewareFunc {
 				return next(c)
 			}
 
-			//Check Permission
-
+			// Check Permission
 			if staff.Role != nil {
 				roleService := service.Role{}
 				if !roleService.HasPermission(ctx, *staff.Role, permission) {

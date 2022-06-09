@@ -12,6 +12,7 @@ import (
 	"myapp/internal/util/echoutil"
 )
 
+// RequireLogin ...
 func RequireLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		staffID := getStaffIDFromContext(c)
@@ -51,6 +52,7 @@ func getStaffIDFromContext(c echo.Context) (id primitive.ObjectID) {
 	return
 }
 
+// CheckRootPermission ...
 func CheckRootPermission(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		staffID := getStaffIDFromContext(c)

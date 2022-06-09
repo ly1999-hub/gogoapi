@@ -1,39 +1,38 @@
 package dao
 
 import (
+	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"myapp/internal/mongodb"
-	"myapp/internal/logger"
-	"context"
-	"myapp/internal/model"
-	"myapp/internal/constant"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"myapp/internal/constant"
+	"myapp/internal/logger"
+	"myapp/internal/model"
+	"myapp/internal/mongodb"
 )
-
 
 type User struct{}
 
-//InsetOne..
-func (d User) InsetOne(ctx context.Context,doc model.User)error{
-	col :=d.getCollection()
-	_,err :=col.InsertOne(ctx,doc)
+// InsetOne ...
+func (d User) InsetOne(ctx context.Context, doc model.User) error {
+	col := d.getCollection()
+	_, err := col.InsertOne(ctx, doc)
 
-	if err!=nil {
-		logger.Error("dao.User - InsertOne",logger.LogData{
-			"doc":doc,
-			"err":err.Error(),
+	if err != nil {
+		logger.Error("dao.User - InsertOne", logger.LogData{
+			"doc": doc,
+			"err": err.Error(),
 		})
 	}
 	return err
 }
 
-//UpdateOne..
-func (d User)UpdateOne(ctx context.Context,cond,payload interface{})error{
-	col :=d.getCollection()
-	_,err :=col.UpdateOne(ctx,cond,payload)
-	if err !=nil {
+// UpdateOne ...
+func (d User) UpdateOne(ctx context.Context, cond, payload interface{}) error {
+	col := d.getCollection()
+	_, err := col.UpdateOne(ctx, cond, payload)
+	if err != nil {
 		logger.Error("dao.User - UpdateOne", logger.LogData{
 			"cond":    cond,
 			"payload": payload,
@@ -43,20 +42,20 @@ func (d User)UpdateOne(ctx context.Context,cond,payload interface{})error{
 	return err
 }
 
-//UpdateByID...
-func (d User)UpdateByID(ctx context.Context,id primitive.ObjectID,payload interface{})error{
-	return d.UpdateOne(ctx,bson.M{"_id":id},payload)
+// UpdateByID ...
+func (d User) UpdateByID(ctx context.Context, id primitive.ObjectID, payload interface{}) error {
+	return d.UpdateOne(ctx, bson.M{"_id": id}, payload)
 }
 
-//FindByID..
-func (d User)FindByID(ctx context.Context,id primitive.ObjectID)(doc model.User){
-	return d.FindOne(ctx,bson.M{"_id":id})
+// FindByID ...
+func (d User) FindByID(ctx context.Context, id primitive.ObjectID) (doc model.User) {
+	return d.FindOne(ctx, bson.M{"_id": id})
 }
 
-//FindOne..
-func (d User)FindOne(ctx context.Context,cond interface{})(doc model.User){
-	col :=d.getCollection()
-	if err :=col.FindOne(ctx,cond).Decode(&doc);err!=nil{
+// FindOne ...
+func (d User) FindOne(ctx context.Context, cond interface{}) (doc model.User) {
+	col := d.getCollection()
+	if err := col.FindOne(ctx, cond).Decode(&doc); err != nil {
 		logger.Error("dao.User - FindOne", logger.LogData{
 			"cond": cond,
 			"err":  err.Error(),
