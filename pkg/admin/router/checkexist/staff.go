@@ -9,6 +9,7 @@ import (
 	"myapp/internal/util/echoutil"
 )
 
+// Staff ...
 func Staff(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (
@@ -16,6 +17,7 @@ func Staff(next echo.HandlerFunc) echo.HandlerFunc {
 			d   = dao.Staff{}
 			id  = c.Param("id")
 		)
+
 		//NewIDFromString by id string
 		dbID, valid := mongodb.NewIDFromString(id)
 		if !valid {

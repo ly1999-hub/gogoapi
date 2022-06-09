@@ -10,6 +10,7 @@ import (
 	"myapp/internal/util/echoutil"
 )
 
+// Role ...
 func Role(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (

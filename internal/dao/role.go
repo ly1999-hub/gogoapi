@@ -15,6 +15,7 @@ import (
 type Role struct {
 }
 
+// InsetOne ...
 func (d Role) InsetOne(ctx context.Context, doc model.Role) error {
 
 	col := d.getCollection()
@@ -30,7 +31,7 @@ func (d Role) InsetOne(ctx context.Context, doc model.Role) error {
 	return err
 }
 
-//UpdateOne...
+// UpdateOne...
 func (d Role) UpdateOne(ctx context.Context, cond, payload interface{}) error {
 	col := d.getCollection()
 	_, err := col.UpdateOne(ctx, cond, payload)
