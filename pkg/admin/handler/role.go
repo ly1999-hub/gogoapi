@@ -126,7 +126,7 @@ func (h Role) DeleteOne(c echo.Context) error {
 	var (
 		ctx  = echoutil.GetRequestContext(c)
 		s    = service.Role{}
-		role = c.Get("roleDelete").(model.Role)
+		role = c.Get(constant.ContextKeyRole).(model.Role)
 	)
 
 	result, err := s.DeleteOne(ctx, role.ID)

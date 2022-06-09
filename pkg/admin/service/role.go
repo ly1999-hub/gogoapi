@@ -5,10 +5,10 @@ import (
 	"myapp/internal/constant"
 	"myapp/internal/dao"
 	"myapp/internal/model"
+	"myapp/internal/module/mongodb"
 	"myapp/internal/util/parray"
 	"myapp/internal/util/ptime"
 	"myapp/internal/util/query"
-	"myapp/module/mongodb"
 	apimodel "myapp/pkg/admin/model/api"
 	responsemodel "myapp/pkg/admin/model/response"
 	"sync"
@@ -107,11 +107,10 @@ func (s Role) All(ctx context.Context, query query.Query) (r responsemodel.Respo
 	return r
 }
 
-// getResponse
-
 func (s Role) getResponse(doc model.Role) responsemodel.Role {
 	//get permission
 	PermissionRes := make([]constant.Permission, 0)
+
 	for _, p := range doc.Permissions {
 		for _, pRes := range constant.Permissions {
 			if p == pRes.Code {
@@ -119,6 +118,7 @@ func (s Role) getResponse(doc model.Role) responsemodel.Role {
 			}
 		}
 	}
+
 	return responsemodel.Role{
 		ID:          doc.ID.Hex(),
 		Name:        doc.Name,

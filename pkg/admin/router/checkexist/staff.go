@@ -4,9 +4,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"myapp/internal/constant"
 	"myapp/internal/dao"
+	"myapp/internal/module/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/echoutil"
-	"myapp/module/mongodb"
 )
 
 func Staff(next echo.HandlerFunc) echo.HandlerFunc {

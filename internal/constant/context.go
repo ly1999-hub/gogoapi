@@ -7,7 +7,6 @@ const (
 
 	ContextKeyRole  = "role"
 	ContextKeyStaff = "staff"
-	ContextKeyUser  = "user"
 
 	ContextKeyCurrentStaff = "current_staff"
 )

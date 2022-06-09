@@ -2,15 +2,14 @@ package dao
 
 import (
 	"context"
-	logger2 "myapp/module/logger"
-	"myapp/module/mongodb"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"myapp/internal/constant"
 	"myapp/internal/model"
+	"myapp/internal/module/logger"
+	"myapp/internal/module/mongodb"
 )
 
 // Staff ...
@@ -21,7 +20,7 @@ func (d Staff) InsertOne(ctx context.Context, doc model.Staff) error {
 	col := d.getCollection()
 	_, err := col.InsertOne(ctx, doc)
 	if err != nil {
-		logger2.Error("dao.Staff - InsertOne", logger2.LogData{
+		logger.Error("dao.Staff - InsertOne", logger.LogData{
 			"doc": doc,
 			"err": err.Error(),
 		})
@@ -34,7 +33,7 @@ func (d Staff) UpdateOne(ctx context.Context, cond, payload interface{}) error {
 	col := d.getCollection()
 	_, err := col.UpdateOne(ctx, cond, payload)
 	if err != nil {
-		logger2.Error("dao.Staff - UpdateOne", logger2.LogData{
+		logger.Error("dao.Staff - UpdateOne", logger.LogData{
 			"cond":    cond,
 			"payload": payload,
 			"err":     err.Error(),
@@ -57,7 +56,7 @@ func (d Staff) FindByID(ctx context.Context, id primitive.ObjectID) (doc model.S
 func (d Staff) FindOne(ctx context.Context, cond interface{}) (doc model.Staff) {
 	col := d.getCollection()
 	if err := col.FindOne(ctx, cond).Decode(&doc); err != nil {
-		logger2.Error("dao.Staff - FindOne", logger2.LogData{
+		logger.Error("dao.Staff - FindOne", logger.LogData{
 			"cond": cond,
 			"err":  err.Error(),
 		})
@@ -70,7 +69,7 @@ func (d Staff) FindByCondition(ctx context.Context, cond interface{}, opts ...*o
 	col := d.getCollection()
 	cursor, err := col.Find(ctx, cond, opts...)
 	if err != nil {
-		logger2.Error("dao.Staff - FindByCondition", logger2.LogData{
+		logger.Error("dao.Staff - FindByCondition", logger.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -79,7 +78,7 @@ func (d Staff) FindByCondition(ctx context.Context, cond interface{}, opts ...*o
 	}
 	defer cursor.Close(ctx)
 	if err := cursor.All(ctx, &docs); err != nil {
-		logger2.Error("dao.Staff - FindByCondition - decode", logger2.LogData{
+		logger.Error("dao.Staff - FindByCondition - decode", logger.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -100,7 +99,7 @@ func (d Staff) CountByCondition(ctx context.Context, cond interface{}) int64 {
 	col := d.getCollection()
 	total, err := col.CountDocuments(ctx, cond)
 	if err != nil {
-		logger2.Error("dao.Staff - CountByCondition", logger2.LogData{
+		logger.Error("dao.Staff - CountByCondition", logger.LogData{
 			"err":  err.Error(),
 			"cond": cond,
 		})

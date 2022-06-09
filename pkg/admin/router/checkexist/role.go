@@ -3,13 +3,14 @@ package checkexist
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"myapp/internal/constant"
 	"myapp/internal/dao"
+	"myapp/internal/module/mongodb"
 	"myapp/internal/response"
 	"myapp/internal/util/echoutil"
-	"myapp/module/mongodb"
 )
 
-func DeleteOne(next echo.HandlerFunc) echo.HandlerFunc {
+func Role(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var (
 			ctx = echoutil.GetRequestContext(c)
@@ -28,8 +29,7 @@ func DeleteOne(next echo.HandlerFunc) echo.HandlerFunc {
 			fmt.Println("hello1")
 			return response.R404(c, nil, response.CommonNotFound)
 		}
-		fmt.Println("hello2")
-		c.Set("roleDelete", doc)
+		c.Set(constant.ContextKeyRole, doc)
 
 		return next(c)
 	}

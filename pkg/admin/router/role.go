@@ -19,5 +19,5 @@ func role(e *echo.Echo) {
 
 	g.POST("", h.Create, middleware.CheckRootPermission, v.Create)
 
-	g.DELETE("/:id", h.DeleteOne, middleware.CheckRootPermission, checkexist.DeleteOne)
+	g.DELETE("/:id", h.DeleteOne, middleware.CheckRootPermission, checkexist.Role)
 }

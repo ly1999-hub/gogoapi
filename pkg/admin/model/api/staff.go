@@ -1,7 +1,7 @@
 package apimodel
 
 import (
-	mongodb2 "myapp/module/mongodb"
+	"myapp/internal/module/mongodb"
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -35,10 +35,10 @@ func (c StaffCreate) Validate() error {
 func (c StaffCreate) NewStaffRaw(roleID primitive.ObjectID, password string) model.Staff {
 	now := time.Now()
 	return model.Staff{
-		ID:             mongodb2.NewObjectID(),
+		ID:             mongodb.NewObjectID(),
 		Name:           c.Name,
 		Email:          c.Email,
-		SearchString:   mongodb2.NonAccentVietnamese(c.Name),
+		SearchString:   mongodb.NonAccentVietnamese(c.Name),
 		Phone:          c.Phone,
 		Active:         false,
 		Role:           &roleID,

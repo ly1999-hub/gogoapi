@@ -1,7 +1,6 @@
 package constant
 
 // Permissions
-
 const (
 	PermissionRoleView = "role_view"
 	PermissionRoleEdit = "role_edit"

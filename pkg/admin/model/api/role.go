@@ -2,8 +2,8 @@ package apimodel
 
 import (
 	"myapp/internal/model"
+	"myapp/internal/module/mongodb"
 	"myapp/internal/util/ptime"
-	mongodb2 "myapp/module/mongodb"
 )
 
 type RoleAll struct {
@@ -28,9 +28,9 @@ type RoleUpdate struct {
 func (a RoleCreate) ConvertToRaw() model.Role {
 	now := ptime.Now()
 	return model.Role{
-		ID:          mongodb2.NewObjectID(),
+		ID:          mongodb.NewObjectID(),
 		Name:        a.Name,
-		Code:        mongodb2.NonAccentVietnamese(a.Name),
+		Code:        mongodb.NonAccentVietnamese(a.Name),
 		Permissions: a.Permission,
 		CreatedAt:   now,
 		UpdatedAt:   now,

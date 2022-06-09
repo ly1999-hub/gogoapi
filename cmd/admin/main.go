@@ -13,10 +13,6 @@ import (
 // @title Admin API
 // @version 1.0
 // @description API for admin management.
-// @termsOfService https://selly.vn
-// @contact.name Dev team
-// @contact.url https://selly.vn
-// @contact.email dev@cashbag.vn
 // @basePath /
 
 // @securityDefinitions.apikey ApiKeyAuth

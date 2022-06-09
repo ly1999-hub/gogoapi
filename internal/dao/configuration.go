@@ -2,12 +2,11 @@ package dao
 
 import (
 	"context"
-	logger2 "myapp/module/logger"
-	"myapp/module/mongodb"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"myapp/internal/constant"
 	"myapp/internal/model"
+	"myapp/internal/module/logger"
+	"myapp/internal/module/mongodb"
 )
 
 // Configuration ...
@@ -18,7 +17,7 @@ func (d Configuration) UpdateOne(ctx context.Context, cond, payload interface{})
 	col := d.getCollection()
 	_, err := col.UpdateOne(ctx, cond, payload)
 	if err != nil {
-		logger2.Error("dao.Configuration - UpdateOne", logger2.LogData{
+		logger.Error("dao.Configuration - UpdateOne", logger.LogData{
 			"cond":    cond,
 			"payload": payload,
 			"err":     err.Error(),
@@ -36,7 +35,7 @@ func (d Configuration) FindOne(ctx context.Context, cond interface{}) (model.Con
 
 	err := col.FindOne(ctx, cond).Decode(&doc)
 	if err != nil {
-		logger2.Error("dao.Configuration - FindOne", logger2.LogData{
+		logger.Error("dao.Configuration - FindOne", logger.LogData{
 			"cond": cond,
 			"err":  err.Error(),
 		})
