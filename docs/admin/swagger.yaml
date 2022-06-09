@@ -18,6 +18,39 @@ definitions:
           type: string
         type: array
     type: object
+  apimodel.StaffCreate:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    type: object
+  apimodel.StaffLoginWithEmail:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  apimodel.StaffUpdate:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    type: object
   constant.Permission:
     properties:
       code:
@@ -89,6 +122,45 @@ definitions:
       role:
         $ref: '#/definitions/responsemodel.Role'
     type: object
+  responsemodel.RoleShort:
+    properties:
+      _id:
+        type: string
+      isAdmin:
+        type: boolean
+      name:
+        type: string
+    type: object
+  responsemodel.Staff:
+    properties:
+      _id:
+        type: string
+      active:
+        type: boolean
+      avatar:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      isRoot:
+        type: boolean
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        $ref: '#/definitions/responsemodel.RoleShort'
+      updatedAt:
+        type: string
+    type: object
+  responsemodel.StaffLogin:
+    properties:
+      _id:
+        type: string
+      token:
+        type: string
+    type: object
   responsemodel.User:
     properties:
       _id:
@@ -131,6 +203,7 @@ paths:
     get:
       consumes:
       - application/json
+      operationId: role-all
       parameters:
       - in: query
         name: keyword
@@ -141,11 +214,16 @@ paths:
       - in: query
         name: page
         type: integer
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/responsemodel.ResponseList'
+      security:
+      - ApikeyAuth: []
+      summary: ALl
       tags:
       - Role
     post:
@@ -172,6 +250,24 @@ paths:
       tags:
       - Role
   /roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: role-delete-one
+      parameters:
+      - description: role id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteOne
+      tags:
+      - Role
     get:
       consumes:
       - application/json
@@ -222,6 +318,153 @@ paths:
       summary: Update
       tags:
       - Role
+  /staff:
+    get:
+      consumes:
+      - application/json
+      operationId: staff-all
+      parameters:
+      - in: query
+        name: active
+        type: string
+      - in: query
+        name: keyword
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.ResponseList'
+      security:
+      - ApiKeyAuth: []
+      summary: All
+      tags:
+      - Staff
+  /staff/{id}/change-status:
+    patch:
+      consumes:
+      - application/json
+      operationId: change-status
+      parameters:
+      - description: staff id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.ResponseUpdate'
+      security:
+      - ApiKeyAuth: []
+      summary: ChangeStatus
+      tags:
+      - Staff
+  /staffs:
+    post:
+      consumes:
+      - application/json
+      operationId: staff-create
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/apimodel.StaffCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.ResponseCreate'
+      security:
+      - ApikeyAuth: []
+      summary: Create
+      tags:
+      - Staff
+  /staffs/{id}:
+    put:
+      consumes:
+      - application/json
+      operationId: update-staff
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/apimodel.StaffUpdate'
+      - description: staff id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.ResponseUpdate'
+      security:
+      - ApiKeyAuth: []
+      summary: Update
+      tags:
+      - Staff
+  /staffs/login-with-email:
+    post:
+      consumes:
+      - application/json
+      operationId: login-with-email
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/apimodel.StaffLoginWithEmail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.StaffLogin'
+      security:
+      - ApiKeyAuth: []
+      summary: LoginWithEmail
+      tags:
+      - Staff
+  /staffs/me:
+    get:
+      consumes:
+      - application/json
+      operationId: get-me
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responsemodel.Staff'
+      security:
+      - ApiKeyAuth: []
+      summary: GetMe
+      tags:
+      - Staff
   /users:
     get:
       consumes:
