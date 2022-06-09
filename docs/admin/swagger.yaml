@@ -58,25 +58,6 @@ definitions:
       name:
         type: string
     type: object
-  model.UserStatistic:
-    properties:
-      totalCustomer:
-        type: integer
-      totalOrder:
-        type: integer
-      totalOrderCanceled:
-        type: integer
-      totalOrderCompleted:
-        type: integer
-      totalOrderDelivered:
-        type: integer
-      totalOrderDelivering:
-        type: integer
-      totalOrderPending:
-        type: integer
-      totalOrderWaitingApproved:
-        type: integer
-    type: object
   ptime.TimeResponse:
     properties:
       time:
@@ -160,34 +141,6 @@ definitions:
         type: string
       token:
         type: string
-    type: object
-  responsemodel.User:
-    properties:
-      _id:
-        type: string
-      avatar:
-        type: string
-      banned:
-        type: boolean
-      createdAt:
-        $ref: '#/definitions/ptime.TimeResponse'
-      email:
-        description: unique
-        type: string
-      name:
-        type: string
-      phone:
-        description: unique
-        type: string
-      statistic:
-        $ref: '#/definitions/model.UserStatistic'
-      updatedAt:
-        $ref: '#/definitions/ptime.TimeResponse'
-    type: object
-  responsemodel.UserDetail:
-    properties:
-      user:
-        $ref: '#/definitions/responsemodel.User'
     type: object
 info:
   contact:
@@ -465,88 +418,6 @@ paths:
       summary: GetMe
       tags:
       - Staff
-  /users:
-    get:
-      consumes:
-      - application/json
-      operationId: user-all
-      parameters:
-      - in: query
-        name: banned
-        type: string
-      - in: query
-        name: fromAt
-        type: string
-      - in: query
-        name: keyword
-        type: string
-      - in: query
-        name: limit
-        type: integer
-      - in: query
-        name: page
-        type: integer
-      - in: query
-        name: toAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responsemodel.User'
-      security:
-      - ApiKeyAuth: []
-      summary: All
-      tags:
-      - User
-  /users/{id}:
-    get:
-      consumes:
-      - application/json
-      operationId: user-detail
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responsemodel.UserDetail'
-      security:
-      - ApiKeyAuth: []
-      summary: Detail
-      tags:
-      - User
-  /users/{id}/banned:
-    patch:
-      consumes:
-      - application/json
-      operationId: user-banned
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/responsemodel.ResponseUpdate'
-      security:
-      - ApiKeyAuth: []
-      summary: Banned
-      tags:
-      - User
 securityDefinitions:
   ApiKeyAuth:
     in: header

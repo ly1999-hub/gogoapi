@@ -11,7 +11,6 @@ func Init(e *echo.Echo) {
 	e.Use(middlewares.JWT(config.GetENV().AuthSecret))
 
 	role(e)
-	user(e)
 	permission(e)
 	staff(e)
 }
