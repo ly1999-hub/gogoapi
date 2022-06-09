@@ -6,9 +6,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"myapp/internal/constant"
-	"myapp/internal/logger"
 	"myapp/internal/model"
-	"myapp/internal/mongodb"
+	logger2 "myapp/module/logger"
+	"myapp/module/mongodb"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -22,7 +22,7 @@ func (d Role) InsetOne(ctx context.Context, doc model.Role) error {
 
 	_, err := col.InsertOne(ctx, doc)
 	if err != nil {
-		logger.Error("insertone- dao Role", logger.LogData{
+		logger2.Error("insertone- dao Role", logger2.LogData{
 			"doc": doc,
 			"err": err.Error(),
 		})
@@ -36,7 +36,7 @@ func (d Role) UpdateOne(ctx context.Context, cond, payload interface{}) error {
 	col := d.getCollection()
 	_, err := col.UpdateOne(ctx, cond, payload)
 	if err != nil {
-		logger.Error("updateone dao role", logger.LogData{
+		logger2.Error("updateone dao role", logger2.LogData{
 			"cond":    cond,
 			"payload": payload,
 			"err":     err.Error(),
@@ -56,7 +56,7 @@ func (d Role) FindOne(ctx context.Context, cond interface{}) (doc model.Role) {
 
 	err := col.FindOne(ctx, cond).Decode(&doc)
 	if err != nil {
-		logger.Error("FindOne Role dao", logger.LogData{
+		logger2.Error("FindOne Role dao", logger2.LogData{
 			"cond": cond,
 			"err":  err.Error(),
 		})
@@ -77,7 +77,7 @@ func (d Role) FindByCondition(ctx context.Context, cond interface{}, opts ...*op
 	cursor, err := col.Find(ctx, cond, opts...)
 
 	if err != nil {
-		logger.Error("FindByCondition Role dao", logger.LogData{
+		logger2.Error("FindByCondition Role dao", logger2.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -87,7 +87,7 @@ func (d Role) FindByCondition(ctx context.Context, cond interface{}, opts ...*op
 	defer cursor.Close(ctx)
 
 	if err := cursor.All(ctx, &docs); err != nil {
-		logger.Error("dao.Role-FindByCondition", logger.LogData{
+		logger2.Error("dao.Role-FindByCondition", logger2.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -108,7 +108,7 @@ func (d Role) CountByCondition(ctx context.Context, cond interface{}) int64 {
 	col := d.getCollection()
 	total, err := col.CountDocuments(ctx, cond)
 	if err != nil {
-		logger.Error("dao.Role-CountByCondition", logger.LogData{
+		logger2.Error("dao.Role-CountByCondition", logger2.LogData{
 			"cond": cond,
 			"err":  err.Error(),
 		})
@@ -123,7 +123,7 @@ func (d Role) DeleteOne(ctx context.Context, id primitive.ObjectID) (result int6
 
 	results, err := col.DeleteOne(ctx, bson.M{"_id": id})
 	if err != nil {
-		logger.Error("DeleteOne-Dao Role", logger.LogData{
+		logger2.Error("DeleteOne-Dao Role", logger2.LogData{
 			"id":  id,
 			"err": err.Error(),
 		})

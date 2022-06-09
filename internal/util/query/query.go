@@ -1,17 +1,17 @@
 package query
 
 import (
+	mongodb2 "myapp/module/mongodb"
 	"strconv"
 	"time"
 
-	"myapp/internal/constant"
-	"myapp/internal/mongodb"
-	"myapp/internal/util/parray"
-	"myapp/internal/util/pstring"
-	"myapp/internal/util/ptime"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"myapp/internal/constant"
+	"myapp/internal/util/parray"
+	"myapp/internal/util/pstring"
+	"myapp/internal/util/ptime"
 )
 
 // Query ...
@@ -99,7 +99,7 @@ func (q Query) AssignUser(cond bson.M) {
 // AssignKeyword ...
 func (q Query) AssignKeyword(cond bson.M) {
 	if len(q.Keyword) >= constant.MinLenKeyword {
-		cond["searchString"] = mongodb.GenerateQuerySearchString(q.Keyword)
+		cond["searchString"] = mongodb2.GenerateQuerySearchString(q.Keyword)
 	}
 }
 
@@ -136,7 +136,7 @@ func (q Query) AssignOrderStatus(cond bson.M) {
 // AssignInventory ...
 func (q Query) AssignInventory(cond bson.M) {
 	if q.Inventory != "" {
-		if inventoryID, isValid := mongodb.NewIDFromString(q.Inventory); isValid {
+		if inventoryID, isValid := mongodb2.NewIDFromString(q.Inventory); isValid {
 			cond["inventory._id"] = inventoryID
 		}
 	}
@@ -167,7 +167,7 @@ func (q *Query) SetDefaultLimit() {
 // AssignSupplierMap ...
 func (q *Query) AssignSupplierMap(m map[string]interface{}) {
 	if q.Supplier != "" {
-		supplierID, _ := mongodb.NewIDFromString(q.Supplier)
+		supplierID, _ := mongodb2.NewIDFromString(q.Supplier)
 		if !supplierID.IsZero() {
 			m["supplier"] = supplierID
 		}

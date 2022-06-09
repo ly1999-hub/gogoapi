@@ -1,9 +1,9 @@
 package parray
 
 import (
-	"myapp/internal/mongodb"
 	"github.com/thoas/go-funk"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"myapp/module/mongodb"
 )
 
 // ConvertStringsToObjectIDs ...

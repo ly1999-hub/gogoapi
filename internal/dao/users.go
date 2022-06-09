@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"myapp/internal/constant"
-	"myapp/internal/logger"
 	"myapp/internal/model"
-	"myapp/internal/mongodb"
+	logger2 "myapp/module/logger"
+	"myapp/module/mongodb"
 )
 
 type User struct{}
@@ -20,7 +20,7 @@ func (d User) InsetOne(ctx context.Context, doc model.User) error {
 	_, err := col.InsertOne(ctx, doc)
 
 	if err != nil {
-		logger.Error("dao.User - InsertOne", logger.LogData{
+		logger2.Error("dao.User - InsertOne", logger2.LogData{
 			"doc": doc,
 			"err": err.Error(),
 		})
@@ -33,7 +33,7 @@ func (d User) UpdateOne(ctx context.Context, cond, payload interface{}) error {
 	col := d.getCollection()
 	_, err := col.UpdateOne(ctx, cond, payload)
 	if err != nil {
-		logger.Error("dao.User - UpdateOne", logger.LogData{
+		logger2.Error("dao.User - UpdateOne", logger2.LogData{
 			"cond":    cond,
 			"payload": payload,
 			"err":     err.Error(),
@@ -56,7 +56,7 @@ func (d User) FindByID(ctx context.Context, id primitive.ObjectID) (doc model.Us
 func (d User) FindOne(ctx context.Context, cond interface{}) (doc model.User) {
 	col := d.getCollection()
 	if err := col.FindOne(ctx, cond).Decode(&doc); err != nil {
-		logger.Error("dao.User - FindOne", logger.LogData{
+		logger2.Error("dao.User - FindOne", logger2.LogData{
 			"cond": cond,
 			"err":  err.Error(),
 		})
@@ -69,7 +69,7 @@ func (d User) FindByCondition(ctx context.Context, cond interface{}, opts ...*op
 	col := d.getCollection()
 	cursor, err := col.Find(ctx, cond, opts...)
 	if err != nil {
-		logger.Error("dao.User - FindByCondition", logger.LogData{
+		logger2.Error("dao.User - FindByCondition", logger2.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -78,7 +78,7 @@ func (d User) FindByCondition(ctx context.Context, cond interface{}, opts ...*op
 	}
 	defer cursor.Close(ctx)
 	if err := cursor.All(ctx, &docs); err != nil {
-		logger.Error("dao.User - FindByCondition - decode", logger.LogData{
+		logger2.Error("dao.User - FindByCondition - decode", logger2.LogData{
 			"cond": cond,
 			"opts": opts,
 			"err":  err.Error(),
@@ -99,7 +99,7 @@ func (d User) CountByCondition(ctx context.Context, cond interface{}) int64 {
 	col := d.getCollection()
 	total, err := col.CountDocuments(ctx, cond)
 	if err != nil {
-		logger.Error("dao.User - CountByCondition", logger.LogData{
+		logger2.Error("dao.User - CountByCondition", logger2.LogData{
 			"err":  err.Error(),
 			"cond": cond,
 		})
